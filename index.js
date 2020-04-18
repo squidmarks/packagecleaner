@@ -1,25 +1,46 @@
 require('dotenv').config()
+require('./cleanup').Cleanup(appCleanup)
 const gpio = require('onoff').Gpio
 const TelegramService = require('./telegram')
 
-const telegram = new TelegramService()
+const defaultCleaningTime = 20
 
-const cleanup = require('./cleanup').Cleanup(appCleanup)
+const telegram = new TelegramService(processCommand)
 
 function appCleanup() {
   telegram.shutdown()
 };
 
-const switch_1 = new gpio(6, 'out')
-const switch_2 = new gpio(13, 'out')
-const switch_3 = new gpio(19, 'out')
+const ozoneGenerator = new gpio(6, 'out')
+const redLight = new gpio(13, 'out')
+const greenLight = new gpio(19, 'out')
 const switch_4 = new gpio(26, 'out')
 
-setInterval(() => {
-  const state = switch_1.readSync() === 0 ? 1:0
-  switch_1.writeSync(state)
-  switch_2.writeSync(state)
-  switch_3.writeSync(state)
-  switch_4.writeSync(state)
-},200)
+ozoneGenerator.writeSync(0)
+redLight.writeSync(0)
+greenLight.writeSync(0)
 
+function startCleaningCycle(minutes) {
+  telegram.sendMessage(`Starting ${minutes || defaultCleaningTime} cleaning cycle...`)
+  ozoneGenerator.writeSync(1)
+  redLight.writeSync(1)
+  greenLight.writeSync(0)
+  setTimeout(() => {
+    ozoneGenerator.writeSync(0)
+    redLight.writeSync(0)
+    greenLight.writeSync(1)  
+    telegram.sendMessage(`${minutes || defaultCleaningTime} cleaning cycle completed!`)
+  }, (minutes || defaultCleaningTime) * 60 * 1000)
+}
+
+function abortCleaningCycle() {
+  ozoneGenerator.writeSync(0)
+  redLight.writeSync(0)
+  greenLight.writeSync(0)  
+  telegram.sendMessage(`Cleaning cycle aborted`)
+}
+
+function processCommand (command, parameters) {
+  if (command.toLowercase() === 'clean') startCleaningCycle(parameters[0])
+  if (command.toLowercase() === 'stop') abortCleaningCycle()
+}
