@@ -36,7 +36,7 @@ class TelegramService {
         if (botCmd === '/end') {
           if (!this.subscribers[message.from.id]) {
             delete this.subscribers[message.from.id]
-            saveSubscribers()              
+            this.saveSubscribers()              
           }
           this.slimbot.sendMessage(message.from.id, 'You have unsubscribed from the Package Cleaning bot')
         }
@@ -44,7 +44,7 @@ class TelegramService {
         if (botCmd === '/start') {
           if (!this.subscribers[message.from.id]) {
             this.subscribers[message.from.id] = message.from
-            saveSubscribers()              
+            this.saveSubscribers()              
           }
 
           this.slimbot.sendMessage(message.from.id, 
