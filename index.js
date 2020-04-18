@@ -41,6 +41,6 @@ function abortCleaningCycle() {
 }
 
 function processCommand (command, parameters) {
-  if (command.toLowercase() === 'clean') startCleaningCycle(parameters[0])
-  if (command.toLowercase() === 'stop') abortCleaningCycle()
+  if (command.toLowerCase() === 'clean') startCleaningCycle(parameters[0])
+  if (command.toLowerCase() === 'stop') abortCleaningCycle()
 }
