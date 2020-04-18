@@ -20,8 +20,8 @@ ozoneGenerator.writeSync(0)
 redLight.writeSync(0)
 greenLight.writeSync(0)
 
-function startCleaningCycle(minutes) {
-  telegram.sendMessage(`Starting ${minutes || defaultCleaningTime} cleaning cycle...`)
+function startCleaningCycle(minutes, fromId) {
+  telegram.sendMessage(`Starting ${minutes || defaultCleaningTime} cleaning cycle...`, fromId)
   ozoneGenerator.writeSync(1)
   redLight.writeSync(1)
   greenLight.writeSync(0)
@@ -29,18 +29,18 @@ function startCleaningCycle(minutes) {
     ozoneGenerator.writeSync(0)
     redLight.writeSync(0)
     greenLight.writeSync(1)  
-    telegram.sendMessage(`${minutes || defaultCleaningTime} cleaning cycle completed!`)
+    telegram.sendMessage(`${minutes || defaultCleaningTime} cleaning cycle completed!`, fromId)
   }, (minutes || defaultCleaningTime) * 60 * 1000)
 }
 
-function abortCleaningCycle() {
+function abortCleaningCycle(fromId) {
   ozoneGenerator.writeSync(0)
   redLight.writeSync(0)
   greenLight.writeSync(0)  
-  telegram.sendMessage(`Cleaning cycle aborted`)
+  telegram.sendMessage(`Cleaning cycle aborted`, fromId)
 }
 
-function processCommand (command, parameters) {
-  if (command.toLowerCase() === 'clean') startCleaningCycle(parameters[0])
-  if (command.toLowerCase() === 'stop') abortCleaningCycle()
+function processCommand (command, parameters, fromId) {
+  if (command.toLowerCase() === 'clean') startCleaningCycle(parameters[0], fromId)
+  if (command.toLowerCase() === 'stop') abortCleaningCycle(fromId)
 }

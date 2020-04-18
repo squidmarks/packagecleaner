@@ -25,7 +25,7 @@ class TelegramService {
         if (botCmd === '/start') {
           this.slimbot.sendMessage(message.from.id, 
             `Hi ${message.from.first_name}!  Welcome to the Package Cleaner bot!\r\nYou can start cleaning by entering /clean\r\nThis will clean a package for the default time of 15min\r\nIf you want to specify the cleaning time, use:\r\n\r\n/clean 20 (to clean for 20 minutes)`)
-        } else callback(botCmd, parameters)
+        } else callback(botCmd, parameters, message.from.id)
       })
 
       this.slimbot.startPolling((err, obj) => {
