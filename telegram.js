@@ -23,7 +23,7 @@ class TelegramService {
     }
 
     try {
-      this.subcribers = jsonfile.readFileSync('./subscribers.json')
+      this.subscribers = jsonfile.readFileSync('./subscribers.json')
       console.log(`${Object.keys(this.subscribers).length} subscribers loaded`)        
     } catch (error) {
       console.log(`No subscribers loaded`)  
@@ -59,6 +59,7 @@ class TelegramService {
         } else callback(botCmd, parameters, message.from.id)
       })
 
+      this.broadcastMessage('Package cleaner is online!')
       this.slimbot.startPolling((err, obj) => {
         console.log(`Telegram client now polling for messages`)
         if (err) {
