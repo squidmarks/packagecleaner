@@ -45,7 +45,7 @@ function startCleaningCycle(minutes) {
   }
   console.log('Starting cleaning cycle')
   busyCleaning = true
-  telegram.broadcastMessage(`Starting ${minutes || defaultCleaningTime} cleaning cycle...`)
+  telegram.broadcastMessage(`Starting ${minutes || defaultCleaningTime}min cleaning cycle...`)
   ozoneGenerator.writeSync(ON)
   redLight.writeSync(ON)
   greenLight.writeSync(OFF)
@@ -56,7 +56,7 @@ function startCleaningCycle(minutes) {
     greenLight.writeSync(ON)  
     console.log('Cleaning cycle completed')
     telegram.broadcastMessage(`${minutes || defaultCleaningTime} cleaning cycle completed!`)
-  }, (minutes || defaultCleaningTime) * 1000)
+  }, (minutes || defaultCleaningTime) * 60 * 1000)
 }
 
 function abortCleaningCycle() {
