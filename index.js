@@ -30,32 +30,40 @@ redLight.writeSync(OFF)
 greenLight.writeSync(OFF)
 switch_4.writeSync(OFF)
 
-function startCleaningCycle(minutes, fromId) {
+lidSwitch.watch((err, value) => {
+  if (err) {
+    throw err;
+  }
+
+
+})
+
+function startCleaningCycle(minutes) {
   if (busyCleaning) {
     console.log('Start cleaning request while busy')
-    telegram.sendMessage(`A cleaning cycle is already in progress`, fromId)
+    telegram.broadcastMessage(`A cleaning cycle is already in progress`)
     return
   }
   console.log('Starting cleaning cycle')
   busyCleaning = true
-  telegram.sendMessage(`Starting ${minutes || defaultCleaningTime} cleaning cycle...`, fromId)
+  telegram.broadcastMessage(`Starting ${minutes || defaultCleaningTime} cleaning cycle...`)
   ozoneGenerator.writeSync(ON)
   redLight.writeSync(ON)
   greenLight.writeSync(OFF)
   cleaningTimeout = setTimeout(() => {
-    busyCleaning = true
+    busyCleaning = false
     ozoneGenerator.writeSync(OFF)
     redLight.writeSync(OFF)
     greenLight.writeSync(ON)  
     console.log('Cleaning cycle completed')
-    telegram.sendMessage(`${minutes || defaultCleaningTime} cleaning cycle completed!`, fromId)
+    telegram.broadcastMessage(`${minutes || defaultCleaningTime} cleaning cycle completed!`)
   }, (minutes || defaultCleaningTime) * 1000)
 }
 
-function abortCleaningCycle(fromId) {
+function abortCleaningCycle() {
   if (!busyCleaning) {
     console.log('Abort cleaning request received with no cycle running')
-    telegram.sendMessage(`A cleaning cycle has not started`, fromId)
+    telegram.broadcastMessage(`A cleaning cycle has not started`)
     return
   }
   ozoneGenerator.writeSync(OFF)
@@ -64,10 +72,10 @@ function abortCleaningCycle(fromId) {
   busyCleaning = false
   clearTimeout(cleaningTimeout)
   console.log('Cleaning cycle aborted')
-  telegram.sendMessage(`Cleaning cycle aborted`, fromId)
+  telegram.broadcastMessage(`Cleaning cycle aborted`)
 }
 
-function processCommand (command, parameters, fromId) {
-  if (command.toLowerCase() === '/clean') startCleaningCycle(parameters[0], fromId)
-  if (['/stop', '/abort'].includes(command.toLowerCase())) abortCleaningCycle(fromId)
+function processCommand (command, parameters) {
+  if (command.toLowerCase() === '/clean') startCleaningCycle(parameters[0])
+  if (['/stop', '/abort'].includes(command.toLowerCase())) abortCleaningCycle()
 }
