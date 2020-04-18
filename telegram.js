@@ -19,7 +19,8 @@ class TelegramService {
       this.subcribers = jsonfile.readFileSync('./subscribers.json')
       console.log(`${Object.keys(this.subscribers).length} subscribers loaded`)        
     } catch (error) {
-      console.log(`No subscribers loaded`)              
+      console.log(`No subscribers loaded`)  
+      this.subscribers = {}           
     }
 
     if (this.slimbot) {
