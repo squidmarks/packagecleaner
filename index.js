@@ -32,7 +32,7 @@ function startCleaningCycle(minutes, fromId) {
     greenLight.writeSync(1)  
     console.log('Cleaning cycle completed')
     telegram.sendMessage(`${minutes || defaultCleaningTime} cleaning cycle completed!`, fromId)
-  }, (minutes || defaultCleaningTime) * 60 * 1000)
+  }, (minutes || defaultCleaningTime) * 1000)
 }
 
 function abortCleaningCycle(fromId) {
