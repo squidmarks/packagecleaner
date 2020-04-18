@@ -29,7 +29,7 @@ class TelegramService {
       })
 
       this.slimbot.startPolling((err, obj) => {
-        this.logger.info(`${connection.name} telegram client now polling for messages`)
+        console.log(`Telegram client now polling for messages`)
         if (err) {
           this.slimbot.stopPolling()
           console.log(`Error starting Telegram, stopping service: ${err.message}`)
