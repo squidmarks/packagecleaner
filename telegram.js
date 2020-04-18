@@ -2,6 +2,13 @@ const Slimbot = require('slimbot')
 const jsonfile = require('jsonfile')
 const file = '/tmp/data.json'
 
+function saveSubscribers(subscribers) {
+  jsonfile.writeFile('./subscribers.json', subscribers, function (err) {
+    if (err) console.error(err)
+    console.log(`${Object.keys(subscribers).length} subscribers saved`)
+  })  
+}
+
 class TelegramService {
   constructor (callback) {
     if (process.env.TELEGRAM_KEY) {
@@ -36,7 +43,7 @@ class TelegramService {
         if (botCmd === '/end') {
           if (!this.subscribers[message.from.id]) {
             delete this.subscribers[message.from.id]
-            this.saveSubscribers()              
+            saveSubscribers(this.subcribers)              
           }
           this.slimbot.sendMessage(message.from.id, 'You have unsubscribed from the Package Cleaning bot')
         }
@@ -44,7 +51,7 @@ class TelegramService {
         if (botCmd === '/start') {
           if (!this.subscribers[message.from.id]) {
             this.subscribers[message.from.id] = message.from
-            this.saveSubscribers()              
+            this.saveSubscribers(this.subcribers)              
           }
 
           this.slimbot.sendMessage(message.from.id, 
@@ -73,13 +80,6 @@ class TelegramService {
     })
   }
   
-  saveSubscribers() {
-    jsonfile.writeFile('./subscribers.json', this.subscribers, function (err) {
-      if (err) console.error(err)
-      console.log(`${Object.keys(this.subscribers).length} subscribers saved`)
-    })  
-  }
-
 }
 
 module.exports = TelegramService
