@@ -51,7 +51,7 @@ class TelegramService {
         if (botCmd === '/start') {
           if (!this.subscribers[message.from.id]) {
             this.subscribers[message.from.id] = message.from
-            this.saveSubscribers(this.subcribers)              
+            saveSubscribers(this.subcribers)              
           }
 
           this.slimbot.sendMessage(message.from.id, 
