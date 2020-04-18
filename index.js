@@ -1,19 +1,13 @@
 const Slimbot = require('slimbot')
 const dotenv = require('dotenv')
 const gpio = require('onoff').Gpio
-const cleanup = require('./cleanup').Cleanup(myCleanup)
+const cleanup = require('./cleanup').Cleanup(appCleanup)
 
-function myCleanup() {
-  console.log('App specific cleanup code...');
+const telegram = new require('./telegram')
+
+function appCleanup() {
+  telegram.shutdown()
 };
-
-const botName = 'packagecleanerbot'
-
-slimbot = new Slimbot(process.env.TELEGRAM_KEY)
-
-slimbot.on('message', () => {
-
-})
 
 const switch_1 = new gpio(6, 'out')
 const switch_2 = new gpio(13, 'out')
