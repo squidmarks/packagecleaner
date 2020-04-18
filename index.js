@@ -14,14 +14,14 @@ function appCleanup() {
   redLight.unexport()
   ozoneGenerator.unexport()
   switch_4.unexport()
-  lidSwich.unexport()  
+  lidSwitch.unexport()  
 };
 
 const ozoneGenerator = new gpio(6, 'out')
 const redLight = new gpio(13, 'out')
 const greenLight = new gpio(19, 'out')
 const switch_4 = new gpio(26, 'out')
-const lidSwich = new Gpio(4, 'in', 'rising', {debounceTimeout: 10})
+const lidSwitch = new Gpio(4, 'in', 'rising', {debounceTimeout: 10})
 
 ozoneGenerator.writeSync(OFF)
 redLight.writeSync(OFF)
