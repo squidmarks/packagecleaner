@@ -34,8 +34,6 @@ lidSwitch.watch((err, value) => {
   if (err) {
     throw err;
   }
-
-
 })
 
 function startCleaningCycle(minutes) {

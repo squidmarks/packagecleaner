@@ -2,23 +2,6 @@ const Slimbot = require('slimbot')
 const jsonfile = require('jsonfile')
 const file = '/tmp/data.json'
 
-const subscribers = {}
-
-function loadSubscribers () {
-  jsonfile.readFile('./subscribers.json', function (err, obj) {
-    if (err) console.log('No subscribers loaded')
-    subscribers = obj
-    console.log(`${Object.keys(subscribers).length} subscribers loaded`)
-  })  
-}
-
-function saveSubscribers() {
-  jsonfile.writeFile('./subscribers.json', subscribers, function (err) {
-    if (err) console.error(err)
-    console.log(`${Object.keys(subscribers).length} subscribers saved`)
-  })  
-}
-
 class TelegramService {
   constructor (callback) {
     if (process.env.TELEGRAM_KEY) {
@@ -32,7 +15,9 @@ class TelegramService {
       throw new Error('A Telegram bot API key must be provided for the Telegram service')
     }
 
-    loadSubscribers()
+    this.subscribers = {}
+  
+    this.loadSubscribers()
 
     if (this.slimbot) {
       this.slimbot.on('message', message => {
@@ -45,17 +30,17 @@ class TelegramService {
         parameters.shift()
 
         if (botCmd === '/end') {
-          if (!subscribers[message.from.id]) {
-            delete subscribers[message.from.id]
-            saveSubscribers(subscribers)              
+          if (!this.subscribers[message.from.id]) {
+            delete this.subscribers[message.from.id]
+            saveSubscribers()              
           }
           this.slimbot.sendMessage(message.from.id, 'You have unsubscribed from the Package Cleaning bot')
         }
 
         if (botCmd === '/start') {
-          if (!subscribers[message.from.id]) {
-            subscribers[message.from.id] = messge.from
-            saveSubscribers(subscribers)              
+          if (!this.subscribers[message.from.id]) {
+            this.subscribers[message.from.id] = messge.from
+            saveSubscribers()              
           }
 
           this.slimbot.sendMessage(message.from.id, 
@@ -79,10 +64,26 @@ class TelegramService {
   }
 
   broadcastMessage (message) {
-    Object.keys(subscribers).forEach( sub => {
-      this.slimbot.sendMessage(subscribers[sub].id, message)
+    Object.keys(this.subscribers).forEach( sub => {
+      this.slimbot.sendMessage(this.subscribers[sub].id, message)
     })
   }
+
+  loadSubscribers () {
+    jsonfile.readFile('./subscribers.json', function (err, obj) {
+      if (err) console.log('No subscribers loaded')
+      this.subscribers = obj
+      console.log(`${Object.keys(this.subscribers).length} subscribers loaded`)
+    })  
+  }
+  
+  saveSubscribers() {
+    jsonfile.writeFile('./subscribers.json', this.subscribers, function (err) {
+      if (err) console.error(err)
+      console.log(`${Object.keys(this.subscribers).length} subscribers saved`)
+    })  
+  }
+
 }
 
 module.exports = TelegramService
