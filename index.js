@@ -32,6 +32,7 @@ switch_4.writeSync(OFF)
 
 function startCleaningCycle(minutes, fromId) {
   if (busyCleaning) {
+    console.log('Start cleaning request while busy')
     telegram.sendMessage(`A cleaning cycle is already in progress`, fromId)
     return
   }
@@ -53,6 +54,7 @@ function startCleaningCycle(minutes, fromId) {
 
 function abortCleaningCycle(fromId) {
   if (!busyCleaning) {
+    console.log('Abort cleaning request received with no cycle running')
     telegram.sendMessage(`A cleaning cycle has not started`, fromId)
     return
   }
