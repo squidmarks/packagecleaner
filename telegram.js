@@ -43,8 +43,8 @@ class TelegramService {
     console.log('Telegram bot terminated')
   }
 
-  sendMessage (message) {
-    this.slimbot.sendMessage(message.from.id, message)
+  sendMessage (message, fromId) {
+    this.slimbot.sendMessage(fromId, message)
   }
 }
 
