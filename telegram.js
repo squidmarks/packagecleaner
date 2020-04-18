@@ -15,7 +15,8 @@ class TelegramService {
       throw new Error('A Telegram bot API key must be provided for the Telegram service')
     }
 
-    this.loadSubscribers()
+    this.subcribers = jsonfile.readFileSync('./subscribers.json')
+    console.log(`${Object.keys(this.subscribers).length} subscribers loaded`)
 
     if (this.slimbot) {
       this.slimbot.on('message', message => {
@@ -65,14 +66,6 @@ class TelegramService {
     Object.keys(this.subscribers).forEach( sub => {
       this.slimbot.sendMessage(this.subscribers[sub].id, message)
     })
-  }
-
-  loadSubscribers () {
-    jsonfile.readFile('./subscribers.json', function (err, obj) {
-      if (err) console.log('No subscribers loaded')
-      this.subscribers = obj
-      console.log(`${Object.keys(this.subscribers).length} subscribers loaded`)
-    })  
   }
   
   saveSubscribers() {
