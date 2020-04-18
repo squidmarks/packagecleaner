@@ -6,6 +6,8 @@ const TelegramService = require('./telegram')
 const defaultCleaningTime = 20
 const OFF = 1
 const ON = 0
+var busyCleaning = false
+var cleaningTimeout
 
 const telegram = new TelegramService(processCommand)
 
@@ -29,12 +31,18 @@ greenLight.writeSync(OFF)
 switch_4.writeSync(OFF)
 
 function startCleaningCycle(minutes, fromId) {
+  if (busyCleaning) {
+    telegram.sendMessage(`A cleaning cycle is already in progress`, fromId)
+    return
+  }
   console.log('Starting cleaning cycle')
+  busyCleaning = true
   telegram.sendMessage(`Starting ${minutes || defaultCleaningTime} cleaning cycle...`, fromId)
   ozoneGenerator.writeSync(ON)
   redLight.writeSync(ON)
   greenLight.writeSync(OFF)
-  setTimeout(() => {
+  cleaningTimeout = setTimeout(() => {
+    busyCleaning = true
     ozoneGenerator.writeSync(OFF)
     redLight.writeSync(OFF)
     greenLight.writeSync(ON)  
@@ -44,9 +52,15 @@ function startCleaningCycle(minutes, fromId) {
 }
 
 function abortCleaningCycle(fromId) {
+  if (!busyCleaning) {
+    telegram.sendMessage(`A cleaning cycle has not started`, fromId)
+    return
+  }
   ozoneGenerator.writeSync(OFF)
   redLight.writeSync(OFF)
   greenLight.writeSync(OFF)  
+  busyCleaning = false
+  clearTimeout(cleaningTimeout)
   console.log('Cleaning cycle aborted')
   telegram.sendMessage(`Cleaning cycle aborted`, fromId)
 }
