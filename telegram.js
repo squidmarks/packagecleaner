@@ -15,8 +15,6 @@ class TelegramService {
       throw new Error('A Telegram bot API key must be provided for the Telegram service')
     }
 
-    this.subscribers = {}
-  
     this.loadSubscribers()
 
     if (this.slimbot) {
@@ -39,7 +37,7 @@ class TelegramService {
 
         if (botCmd === '/start') {
           if (!this.subscribers[message.from.id]) {
-            this.subscribers[message.from.id] = messge.from
+            this.subscribers[message.from.id] = message.from
             saveSubscribers()              
           }
 
