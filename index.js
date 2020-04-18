@@ -15,7 +15,7 @@ const ozoneGenerator = new gpio(6, 'out')
 const redLight = new gpio(13, 'out')
 const greenLight = new gpio(19, 'out')
 const switch_4 = new gpio(26, 'out')
-const lidSwitch = new gpio(4, 'in', 'rising', {debounceTimeout: 10})
+const lidSwitch = new gpio(17, 'in', 'falling', {debounceTimeout: 10})
 
 function appCleanup() {
   telegram.shutdown()
@@ -34,6 +34,7 @@ lidSwitch.watch((err, value) => {
   if (err) {
     throw err;
   }
+  console.log('Lid changed state', value)
 })
 
 function startCleaningCycle(minutes) {
