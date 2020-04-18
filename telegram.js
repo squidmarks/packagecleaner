@@ -1,3 +1,5 @@
+const Slimbot = require('slimbot')
+
 class TelegramService {
   constructor () {
     if (process.env.TELEGRAM_KEY) {

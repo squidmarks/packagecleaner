@@ -1,9 +1,10 @@
-const Slimbot = require('slimbot')
-const dotenv = require('dotenv')
+require('dotenv').config()
 const gpio = require('onoff').Gpio
-const cleanup = require('./cleanup').Cleanup(appCleanup)
+const TelegramService = require('./telegram')
 
-const telegram = new require('./telegram')
+const telegram = new TelegramService()
+
+const cleanup = require('./cleanup').Cleanup(appCleanup)
 
 function appCleanup() {
   telegram.shutdown()
