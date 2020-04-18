@@ -9,6 +9,12 @@ const ON = 0
 
 const telegram = new TelegramService(processCommand)
 
+const ozoneGenerator = new gpio(6, 'out')
+const redLight = new gpio(13, 'out')
+const greenLight = new gpio(19, 'out')
+const switch_4 = new gpio(26, 'out')
+const lidSwitch = new Gpio(4, 'in', 'rising', {debounceTimeout: 10})
+
 function appCleanup() {
   telegram.shutdown()
   redLight.unexport()
@@ -16,12 +22,6 @@ function appCleanup() {
   switch_4.unexport()
   lidSwitch.unexport()  
 };
-
-const ozoneGenerator = new gpio(6, 'out')
-const redLight = new gpio(13, 'out')
-const greenLight = new gpio(19, 'out')
-const switch_4 = new gpio(26, 'out')
-const lidSwitch = new Gpio(4, 'in', 'rising', {debounceTimeout: 10})
 
 ozoneGenerator.writeSync(OFF)
 redLight.writeSync(OFF)
