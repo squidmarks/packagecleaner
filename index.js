@@ -13,7 +13,7 @@ const ozoneGenerator = new gpio(6, 'out')
 const redLight = new gpio(13, 'out')
 const greenLight = new gpio(19, 'out')
 const switch_4 = new gpio(26, 'out')
-const lidSwitch = new Gpio(4, 'in', 'rising', {debounceTimeout: 10})
+const lidSwitch = new gpio(4, 'in', 'rising', {debounceTimeout: 10})
 
 function appCleanup() {
   telegram.shutdown()
