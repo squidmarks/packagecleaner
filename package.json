@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "onoff": "^5.0.1"
+    "dotenv": "^8.2.0",
+    "onoff": "^5.0.1",
+    "slimbot": "^4.6.3"
   },
   "devDependencies": {},
   "scripts": {
