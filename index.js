@@ -128,12 +128,12 @@ function processCommand (command, parameters) {
       default:
         telegram.broadcastMessage('Invalid test parameter')
         return
-        break;
     }
 
-    telegram.broadcastMessage(`Testing ${parameters[0]}`)
+    telegram.broadcastMessage(`${parameters[0]} should be on`)
     deviceToTest.write(ON)
     setTimeout(() => {
+      telegram.broadcastMessage(`${parameters[0]} should be off`)
       deviceToTest.write(OFF)
     }, 1000) 
   }
