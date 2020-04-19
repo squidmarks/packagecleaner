@@ -109,13 +109,32 @@ function processCommand (command, parameters) {
     }
 
     if (command.toLowerCase() === '/test') {
-      if ((parameters[0] === 1) || (parameters[0] === 'ozone')) deviceToTest = ozoneGenerator 
-      if ((parameters[0] === 2) || (parameters[0] === 'humidifier')) deviceToTest = humidifier 
-      if ((parameters[0] === 3) || (parameters[0] === 'red')) deviceToTest = redLight 
-      if ((parameters[0] === 4) || (parameters[0] === 'green')) deviceToTest = greenLight
+      switch (parameters[0]) {
+        case 1, 'ozone':
+          deviceToTest = ozoneGenerator 
+          break;
+          case 1, 'humidifier':
+            deviceToTest = humidifier 
+            break;
+          case 1, 'red':
+            deviceToTest = redLight 
+            break;
+          case 1, 'green':
+            deviceToTest = greenLight 
+            break;
+                  
+        default:
+          broadcastMessage('Invalid test parameter')
+          return
+          break;
+      }
+
+      broadcastMessage(`Testing ${parameters[0]}`)
       deviceToTest.write(ON)
-      setTimeout(() => deviceToTest.write(OFF), 1000) 
+      setTimeout(() => {
+        deviceToTest.write(OFF)
+      }, 1000) 
     }
-    
+
   if (['/stop', '/abort'].includes(command.toLowerCase())) abortCleaningCycle()
 }
