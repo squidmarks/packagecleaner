@@ -1,5 +1,5 @@
 
-*Welcome to the Package Cleaner bot!*
+*bold \*Welcome to the Package Cleaner bot!*
 
 Here are the commands you can use with the Package Cleaner bot:
 /clean - this will start the defaulte 20min cleaning cycle
