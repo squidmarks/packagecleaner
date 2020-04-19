@@ -1,7 +1,7 @@
 
-*bold \*Welcome to the Package Cleaner bot!*
+Welcome to the Package Cleaner bot!
 
-Here are the commands you can use with the Package Cleaner bot:
+Here are the commands you can use:
 /clean - this will start the defaulte 20min cleaning cycle
 /clean 30 - start a cleaning cycle with a specific duration (5-60min)
 /abort or /stop - stop a cleaning process that is in-progress
