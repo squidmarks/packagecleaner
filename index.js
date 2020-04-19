@@ -112,16 +112,16 @@ function processCommand (command, parameters) {
 
   if (command.toLowerCase() === '/test') {
     switch (parameters[0]) {
-      case 1, 'ozone':
+      case 'ozone':
         deviceToTest = ozoneGenerator 
         break;
-        case 1, 'humidifier':
+        case 'humidifier':
           deviceToTest = humidifier 
           break;
-        case 1, 'red':
+        case 'red':
           deviceToTest = redLight 
           break;
-        case 1, 'green':
+        case 'green':
           deviceToTest = greenLight 
           break;
                 
