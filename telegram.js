@@ -1,5 +1,6 @@
 const Slimbot = require('slimbot')
 const jsonfile = require('jsonfile')
+const fs = require('fs')
 
 function saveSubscribers(subscribers) {
   jsonfile.writeFile('./subscribers.json', subscribers, function (err) {
@@ -29,6 +30,14 @@ class TelegramService {
       this.subscribers = {}           
     }
 
+    try {
+      fs.readFile('./telegram.md', 'utf8', function(err, contents) {
+        this.telegramHelp = contents
+    })      
+    } catch (error) {
+      this.telegramHelp = 'Welcome to the Package Cleaner bot'  
+    }
+
     if (this.slimbot) {
       this.slimbot.on('message', message => {
         let botCmd
@@ -47,14 +56,15 @@ class TelegramService {
           this.slimbot.sendMessage(message.from.id, 'You have unsubscribed from the Package Cleaning bot')
         }
 
+        if (botCmd === '/start') this.slimbot.sendMessage(message.from.id, this.telegramHelp)
+
         if (botCmd === '/start') {
           if (!this.subscribers[message.from.id]) {
             this.subscribers[message.from.id] = message.from
             saveSubscribers(this.subcribers)              
           }
 
-          this.slimbot.sendMessage(message.from.id, 
-            `Hi ${message.from.first_name}!  Welcome to the Package Cleaner bot!\r\nYou can start cleaning by entering /clean\r\nThis will clean a package for the default time of 15min\r\nIf you want to specify the cleaning time, use:\r\n\r\n/clean 20 (to clean for 20 minutes)`)
+          this.slimbot.sendMessage(message.from.id, `Hi ${message.from.first_name}!${this.telegramHelp}`)
         } else callback(botCmd, parameters, message.from.id)
       })
 
