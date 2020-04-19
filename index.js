@@ -107,34 +107,35 @@ function processCommand (command, parameters) {
       console.log(error.message)
       telegram.broadcastMessage(`Cleaning cycle not started: ${error.message}`)
     }
+  }
+  if (['/stop', '/abort'].includes(command.toLowerCase())) abortCleaningCycle()
 
-    if (command.toLowerCase() === '/test') {
-      switch (parameters[0]) {
-        case 1, 'ozone':
-          deviceToTest = ozoneGenerator 
+  if (command.toLowerCase() === '/test') {
+    switch (parameters[0]) {
+      case 1, 'ozone':
+        deviceToTest = ozoneGenerator 
+        break;
+        case 1, 'humidifier':
+          deviceToTest = humidifier 
           break;
-          case 1, 'humidifier':
-            deviceToTest = humidifier 
-            break;
-          case 1, 'red':
-            deviceToTest = redLight 
-            break;
-          case 1, 'green':
-            deviceToTest = greenLight 
-            break;
-                  
-        default:
-          broadcastMessage('Invalid test parameter')
-          return
+        case 1, 'red':
+          deviceToTest = redLight 
           break;
-      }
-
-      broadcastMessage(`Testing ${parameters[0]}`)
-      deviceToTest.write(ON)
-      setTimeout(() => {
-        deviceToTest.write(OFF)
-      }, 1000) 
+        case 1, 'green':
+          deviceToTest = greenLight 
+          break;
+                
+      default:
+        broadcastMessage('Invalid test parameter')
+        return
+        break;
     }
 
-  if (['/stop', '/abort'].includes(command.toLowerCase())) abortCleaningCycle()
+    broadcastMessage(`Testing ${parameters[0]}`)
+    deviceToTest.write(ON)
+    setTimeout(() => {
+      deviceToTest.write(OFF)
+    }, 1000) 
+  }
+
 }
