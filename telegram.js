@@ -41,7 +41,7 @@ class TelegramService {
     } catch (error) {
       helpMd = 'Welcome to the Package Cleaner bot'  
     }
-    this.telegramhelp = helpMd
+    this.telegramHelp = helpMd
 
     if (this.slimbot) {
       this.slimbot.on('message', message => {
