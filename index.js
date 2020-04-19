@@ -2,6 +2,7 @@ require('dotenv').config()
 require('./cleanup').Cleanup(appCleanup)
 const gpio = require('onoff').Gpio
 const TelegramService = require('./telegram')
+const DHTsensor = require("node-dht-sensor").promises
 
 const defaultCleaningTime = 20  //Default ozone treatment time (in minutes)
 const minCleaningTime = 5       //Mininum allowable cleaning time
@@ -19,6 +20,9 @@ const humidifier = new gpio(13, 'out')
 const redLight = new gpio(19, 'out')
 const greenLight = new gpio(26, 'out')
 const lidSwitch = new gpio(23, 'in', 'both', {debounceTimeout: 10})
+
+DHTsensor.setMaxRetries(4)
+DHTsensor.initialize(22, 4)
 
 function appCleanup() {
   telegram.shutdown()
@@ -39,6 +43,10 @@ lidSwitch.watch((err, value) => {
   }
   console.log('Lid changed state', value)
 })
+
+function readSensor () {
+  return sensor.readSync(22, 4)
+}
 
 function startCleaningCycle(minutes) {
   if (busyCleaning) {
@@ -109,6 +117,15 @@ function processCommand (command, parameters) {
     }
   }
   if (['/stop', '/abort'].includes(command.toLowerCase())) abortCleaningCycle()
+
+  if (command.toLowerCase() === '/sensor') {
+    try {
+      const reading = readSensor()
+      telegram.broadcastMessage(`temp: ${reading.temperature.toFixed(1)}°C, humidity: ${reading.humidity.toFixed(1)}%`)
+    } catch (error) {
+      telegram.broadcastMessage(`Error reading sensor: ${error.message || error}`)      
+    }
+  }
 
   if (command.toLowerCase() === '/test') {
     switch (parameters[0]) {
