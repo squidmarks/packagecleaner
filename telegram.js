@@ -2,7 +2,7 @@ const Slimbot = require('slimbot')
 const jsonfile = require('jsonfile')
 const file = '/tmp/data.json'
 
-var subcribers
+var subscribers
 
 function saveSubscribers(subscribers) {
   jsonfile.writeFile('./subscribers.json', subscribers, function (err) {
