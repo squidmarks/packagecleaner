@@ -59,6 +59,7 @@ function startCleaningCycle(minutes) {
     busyCleaning = false
     ozoneGenerator.write(OFF)
     redLight.write(OFF)
+    humidifier.write(OFF)
     greenLight.write(ON)  
     console.log('Cleaning cycle completed')
     telegram.broadcastMessage(`${minutes || defaultCleaningTime} cleaning cycle completed!`)
@@ -68,11 +69,6 @@ function startCleaningCycle(minutes) {
 
     humidifier.write(ON)
     console.log('Humidity burst started')
-
-    stopHumidifierTimeout = setTimeout(() => {
-      humidifier.write(ON)
-      console.log('Humidity burst completed')  
-    },  humdityBurstTime * 60 * 1000)
 
   }, (((minutes || defaultCleaningTime) - humdityBurstTime) * 60 * 1000))
 
@@ -104,7 +100,7 @@ function processCommand (command, parameters) {
   if (command.toLowerCase() === '/clean') {
     try {
       const cleaningPeriod = Number(parameters[0])
-      if ((cleaningPeriod > maxCleaningTime) || (cleaningPeriod < minCleaningTime)) throw Error(`Cleaning time must be ${minCleaningTime}-${maxCleaningTime}min`)
+      if ((cleaningPeriod >= maxCleaningTime) || (cleaningPeriod <= minCleaningTime)) throw Error(`Cleaning time must be ${minCleaningTime}-${maxCleaningTime}min`)
       startCleaningCycle(cleaningPeriod)
         
     } catch (error) {

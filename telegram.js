@@ -75,7 +75,6 @@ class TelegramService {
   }
 
   broadcastMessage (message) {
-    console.log(this.subscribers)
     Object.keys(this.subscribers).forEach( sub => {
       this.slimbot.sendMessage(this.subscribers[sub].id, message)
     })
