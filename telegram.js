@@ -22,27 +22,23 @@ class TelegramService {
       throw new Error('A Telegram bot API key must be provided for the Telegram service')
     }
 
-    let subscribers = {}
     try {
-      subscribers = jsonfile.readFileSync('./subscribers.json')
-      console.log(`${Object.keys(subscribers).length} subscribers loaded`)        
+      this.subscribers = jsonfile.readFileSync('./subscribers.json')
+      console.log(`${Object.keys(this.subscribers).length} subscribers loaded`)        
     } catch (error) {
       console.log(`No subscribers loaded`)  
-      subscribers = {}           
+      this.subscribers = {}           
     }
-
-    this.subscribers = subscribers
     
-    let helpMd
     try {
-      fs.readFile('./telegram.md', 'utf8', function(err, contents) {
-        helpMd = contents
-    })      
+      fs.readFile('./telegram.md', 'utf8', (err, contents) => {
+        this.telegramHelp = contents
+      })
     } catch (error) {
       helpMd = 'Welcome to the Package Cleaner bot'  
     }
-    this.telegramHelp = helpMd
 
+    
     if (this.slimbot) {
       this.slimbot.on('message', message => {
         let botCmd
@@ -61,7 +57,7 @@ class TelegramService {
           this.slimbot.sendMessage(message.from.id, 'You have unsubscribed from the Package Cleaning bot')
         }
 
-        if (botCmd === '/start') this.slimbot.sendMessage(message.from.id, this.telegramHelp)
+        if (botCmd === '/help') this.slimbot.sendMessage(message.from.id, this.telegramHelp)
 
         if (botCmd === '/start') {
           if (!this.subscribers[message.from.id]) {
