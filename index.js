@@ -72,7 +72,7 @@ function startCleaningCycle(minutes) {
 
     const reading = readSensor()
     console.log(`Cleaning cycle completed, final humidity: ${reading.humidity.toFixed(1)}%`)
-    telegram.broadcastMessage(`${minutes || defaultCleaningTime} cleaning cycle completed!`)
+    telegram.broadcastMessage(`${minutes || defaultCleaningTime}min cleaning cycle completed!`)
   }, (minutes || defaultCleaningTime) * 60 * 1000)
 
   startHumidifierTimeout = setTimeout(() => {
