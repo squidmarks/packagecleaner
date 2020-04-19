@@ -24,14 +24,14 @@ function appCleanup() {
   telegram.shutdown()
   redLight.unexport()
   ozoneGenerator.unexport()
-  switch_4.unexport()
+  humidifier.unexport()
   lidSwitch.unexport()  
 };
 
 ozoneGenerator.write(OFF)
 redLight.write(OFF)
 greenLight.write(OFF)
-switch_4.write(OFF)
+humidifier.write(OFF)
 
 lidSwitch.watch((err, value) => {
   if (err) {
