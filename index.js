@@ -45,7 +45,7 @@ lidSwitch.watch((err, value) => {
 })
 
 function readSensor () {
-  return sensor.readSync(22, 4)
+  return DHTsensor.readSync(22, 4)
 }
 
 function startCleaningCycle(minutes) {
