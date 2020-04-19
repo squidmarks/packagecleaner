@@ -100,14 +100,22 @@ function processCommand (command, parameters) {
   if (command.toLowerCase() === '/clean') {
     try {
       const cleaningPeriod = Number(parameters[0])
-      if ((cleaningPeriod >= maxCleaningTime) || (cleaningPeriod <= minCleaningTime)) throw Error(`Cleaning time must be ${minCleaningTime}-${maxCleaningTime}min`)
+      if ((cleaningPeriod > maxCleaningTime) || (cleaningPeriod < minCleaningTime)) throw Error(`Cleaning time must be ${minCleaningTime}-${maxCleaningTime}min`)
       startCleaningCycle(cleaningPeriod)
         
     } catch (error) {
       console.log(error.message)
       telegram.broadcastMessage(`Cleaning cycle not started: ${error.message}`)
     }
-  }
 
+    if (command.toLowerCase() === '/test') {
+      if ((parameters[0] === 1) || (parameters[0] === 'ozone')) deviceToTest = ozoneGenerator 
+      if ((parameters[0] === 2) || (parameters[0] === 'humidifier')) deviceToTest = humidifier 
+      if ((parameters[0] === 3) || (parameters[0] === 'red')) deviceToTest = redLight 
+      if ((parameters[0] === 4) || (parameters[0] === 'green')) deviceToTest = greenLight
+      deviceToTest.write(ON)
+      setTimeout(() => deviceToTest.write(OFF), 1000) 
+    }
+    
   if (['/stop', '/abort'].includes(command.toLowerCase())) abortCleaningCycle()
 }
