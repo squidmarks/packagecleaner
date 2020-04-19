@@ -135,7 +135,7 @@ function processCommand (command, parameters) {
     setTimeout(() => {
       telegram.broadcastMessage(`${parameters[0]} should be off`)
       deviceToTest.write(OFF)
-    }, 1000) 
+    }, Number(parameters[1]) || 2000) 
   }
 
 }
