@@ -3,6 +3,7 @@ require('./cleanup').Cleanup(appCleanup)
 const gpio = require('onoff').Gpio
 const TelegramService = require('./telegram')
 const DHTsensor = require("node-dht-sensor").promises
+const moment = require('moment')
 
 const defaultCleaningTime = 20  //Default ozone treatment time (in minutes)
 const minCleaningTime = 5       //Mininum allowable cleaning time
@@ -57,7 +58,7 @@ function startCleaningCycle(minutes) {
   console.log('Starting cleaning cycle')
   busyCleaning = true
 
-  telegram.broadcastMessage(`Starting ${minutes || defaultCleaningTime}min cleaning cycle...`)
+  telegram.broadcastMessage(`Starting ${minutes || defaultCleaningTime}min cleaning cycle\r\nYour packages will be clean at ${moment().add(minutes || defaultCleaningTime, 'minute').format('LT')}`)
   
   ozoneGenerator.write(ON)
   redLight.write(ON)
@@ -119,6 +120,10 @@ function processCommand (command, parameters) {
     }
   }
   if (['/stop', '/abort'].includes(command.toLowerCase())) abortCleaningCycle()
+
+  if (command.toLowerCase() === '/time') {
+
+  }
 
   if (command.toLowerCase() === '/sensor') {
     try {
