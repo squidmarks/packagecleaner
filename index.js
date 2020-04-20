@@ -58,7 +58,7 @@ function startCleaningCycle(minutes) {
   console.log('Starting cleaning cycle')
   busyCleaning = true
 
-  telegram.broadcastMessage(`Starting ${minutes || defaultCleaningTime}min cleaning cycle\r\nYour packages will be clean at ${moment().add(minutes || defaultCleaningTime, 'minute').utcOffset(-4).format('LT')}`)
+  telegram.broadcastMessage(`Starting ${minutes || defaultCleaningTime}min cleaning cycle\r\nYour packages will be clean at ${process.env.UTCOFFSET} ${moment().add(minutes || defaultCleaningTime, 'minute').utcOffset(process.env.UTCOFFSET).format('LT')}`)
   
   ozoneGenerator.write(ON)
   redLight.write(ON)
