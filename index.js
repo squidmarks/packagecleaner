@@ -13,16 +13,21 @@ const OFF = 1
 const ON = 0
 var busyCleaning = false
 var ozoneTimeout, startHumidifierTimeout, stopHumidifierTimeout
-
+const switchStates = {}
 const telegram = new TelegramService(processCommand)
 
 const ozoneGenerator = new gpio(6, 'out')
 const humidifier = new gpio(13, 'out')
 const redLight = new gpio(19, 'out')
 const greenLight = new gpio(26, 'out')
-const lidSwitch = new gpio(24, 'in', 'rising', {debounceTimeout: 50})
-const greenSwitch = new gpio(9, 'in', 'rising', {debounceTimeout: 50})
-const redSwitch = new gpio(11, 'in', 'rising', {debounceTimeout: 50})
+const lidSwitch = new gpio(24, 'in', 'both', {debounceTimeout: 50})
+const greenSwitch = new gpio(9, 'in', 'both', {debounceTimeout: 50})
+const redSwitch = new gpio(11, 'in', 'both', {debounceTimeout: 50})
+
+switchStates.red = redSwitch.readSync()
+switchStates.green = greenSwitch.readSync()
+switchStates.lidSwitch = lidSwitch.readSync()
+console.log(switchStates)
 
 DHTsensor.setMaxRetries(4)
 DHTsensor.initialize(22, 4)
@@ -44,30 +49,46 @@ lidSwitch.watch((err, value) => {
   if (err) {
     throw err;
   }
-  if (value) {
+  if (!switchStates.lidSwitch && value) {
     console.log('Lid was closed', value)
-    //startCleaningCycle()  
   }
+
+  if (switchStates.lidSwitch && !value) {
+    console.log('Lid was opened', value)
+  }
+
+  switchStates.lidSwitch = value
 })
 
 redSwitch.watch((err, value) => {
   if (err) {
     throw err;
   }
-  if (value) {
+
+  if (!switchStates.redSwitch && value) {
     console.log('Red switch was pressed', value)
-    //abortCleaningCycle()  
   }
+
+  if (switchStates.redSwitch && !value) {
+    console.log('Red switch was released', value)
+  }
+
+  switchStates.red = value
 })
 
 greenSwitch.watch((err, value) => {
   if (err) {
     throw err;
   }
-  if (value) {
+  if (!switchStates.greenSwitch && value) {
     console.log('Green switch was pressed', value)
-    //startCleaningCycle()
   }
+
+  if (switchStates.greenSwitch && !value) {
+    console.log('Green switch was released', value)
+  }
+
+  switchStates.green = value
 })
 
 function readSensor () {
