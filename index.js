@@ -20,9 +20,9 @@ const ozoneGenerator = new gpio(6, 'out')
 const humidifier = new gpio(13, 'out')
 const redLight = new gpio(19, 'out')
 const greenLight = new gpio(26, 'out')
-const lidSwitch = new gpio(24, 'in', 'both', {debounceTimeout: 50})
-const redSwitch = new gpio(9, 'in', 'both', {debounceTimeout: 50})
-const blackSwitch = new gpio(11, 'in', 'both', {debounceTimeout: 50})
+const lidSwitch = new gpio(24, 'in', 'rising', {debounceTimeout: 50})
+const greenSwitch = new gpio(9, 'in', 'rising', {debounceTimeout: 50})
+const redSwitch = new gpio(11, 'in', 'rising', {debounceTimeout: 50})
 
 DHTsensor.setMaxRetries(4)
 DHTsensor.initialize(22, 4)
@@ -44,21 +44,30 @@ lidSwitch.watch((err, value) => {
   if (err) {
     throw err;
   }
-  console.log('Lid changed state', value)
+  if (value) {
+    console.log('Lid was closed', value)
+    startCleaningCycle()  
+  }
 })
 
 redSwitch.watch((err, value) => {
   if (err) {
     throw err;
   }
-  console.log('Red switch changed state', value)
+  if (value) {
+    console.log('Red switch was pressed', value)
+    abortCleaningCycle()  
+  }
 })
 
-blackSwitch.watch((err, value) => {
+greenSwitch.watch((err, value) => {
   if (err) {
     throw err;
   }
-  console.log('Black switch changed state', value)
+  if (value) {
+    console.log('Green switch was pressed', value)
+    startCleaningCycle()
+  }
 })
 
 function readSensor () {
