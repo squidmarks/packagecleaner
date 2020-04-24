@@ -46,7 +46,7 @@ lidSwitch.watch((err, value) => {
   }
   if (value) {
     console.log('Lid was closed', value)
-    startCleaningCycle()  
+    //startCleaningCycle()  
   }
 })
 
@@ -56,7 +56,7 @@ redSwitch.watch((err, value) => {
   }
   if (value) {
     console.log('Red switch was pressed', value)
-    abortCleaningCycle()  
+    //abortCleaningCycle()  
   }
 })
 
@@ -66,7 +66,7 @@ greenSwitch.watch((err, value) => {
   }
   if (value) {
     console.log('Green switch was pressed', value)
-    startCleaningCycle()
+    //startCleaningCycle()
   }
 })
 
