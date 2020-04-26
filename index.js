@@ -132,7 +132,7 @@ function readSensor () {
 }
 
 function startCleaningCycle(minutes) {
-  if (cleaningState ===) {
+  if ((cleaningState == cleaningStates.ozoneTreatment) || (cleaningState == cleaningStates.humidityPulse)) {
     console.log('Start cleaning request while busy')
     telegram.broadcastMessage(`A cleaning cycle is already in progress`)
     return
