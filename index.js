@@ -85,10 +85,12 @@ function setState(device, state) {
 function initialize() {
   stateInterval = setInterval( () => {
     if (!lidSwitch.readSync()) {
-      if ((Date.now() - lidOpenedTime) > 20000) abortCleaningCycle()
+      if (((Date.now() - lidOpenedTime) > 20000) && ((cleaningState != cleaningStates.ozoneTreatment) && 
+        (cleaningState != cleaningStates.humidityPulse))) abortCleaningCycle()
       setState(ozoneGenerator, OFF)
       setState(humidifier, OFF)
     } else {
+      lidOpenedTime = Date.now()
       setState(ozoneGenerator, cleaningState.ozone)
       setState(humidifier, cleaningState.humidifier)
       setState(redLight, cleaningState.redLight)
@@ -103,7 +105,7 @@ lidSwitch.watch((err, value) => {
   }
   if (!switchStates.lidSwitch && value) {
     console.log('Lid was closed', value)
-    if (cleaningState == cleaningStates.unknown) startCleaningCycle()
+    if ((cleaningState == cleaningStates.unknown) ((Date.now() - lidOpenedTime) > 20000)) startCleaningCycle()
     if (cleaningState == cleaningStates.cleaned) cleaningState == cleaningStates.unknown
   }
 
