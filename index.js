@@ -12,7 +12,7 @@ const humdityBurstTime = 5      //Time of humdidity burst after ozone treatment 
 const OFF = 1
 const ON = 0
 const stateUpdateInterval = 500
-const lidOpenedTime = Date.now()
+var lidOpenedTime = Date.now()
 var ozoneTimeout, startHumidifierTimeout, stopHumidifierTimeout, stateInterval
 const switchStates = {}
 const telegram = new TelegramService(processCommand)
@@ -233,6 +233,7 @@ function processCommand (command, parameters) {
   }
 
   stateInterval = setInterval( () => {
+    console.log(cleaningState)
     ozoneGenerator.write(OFF)
     humidifier.write(OFF)
     redLight.write(cleaningState.redLight === 'on' ? ON:OFF)
