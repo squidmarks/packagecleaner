@@ -76,6 +76,16 @@ function appCleanup() {
   lidSwitch.unexport()  
 };
 
+function initialize() => {
+  stateInterval = setInterval( () => {
+    console.log(cleaningState)
+    ozoneGenerator.write(OFF)
+    humidifier.write(OFF)
+    redLight.write(cleaningState.redLight === 'on' ? ON:OFF)
+    greenLight.write(cleaningState.greenLight === 'on' ? ON:OFF)
+  }, stateUpdateInterval)
+}
+
 lidSwitch.watch((err, value) => {
   if (err) {
     throw err;
@@ -231,13 +241,6 @@ function processCommand (command, parameters) {
       deviceToTest.write(OFF)
     }, Number(parameters[1]) || 2000) 
   }
-
-  stateInterval = setInterval( () => {
-    console.log(cleaningState)
-    ozoneGenerator.write(OFF)
-    humidifier.write(OFF)
-    redLight.write(cleaningState.redLight === 'on' ? ON:OFF)
-    greenLight.write(cleaningState.greenLight === 'on' ? ON:OFF)
-  }, stateUpdateInterval)
-
 }
+
+initialize()
