@@ -105,7 +105,7 @@ lidSwitch.watch((err, value) => {
   }
   if (!switchStates.lidSwitch && value) {
     console.log('Lid was closed', value)
-    if ((cleaningState == cleaningStates.unknown) ((Date.now() - lidOpenedTime) > 20000)) startCleaningCycle()
+    if ((cleaningState == cleaningStates.unknown) && ((Date.now() - lidOpenedTime) > 20000)) startCleaningCycle()
     if (cleaningState == cleaningStates.cleaned) cleaningState == cleaningStates.unknown
   }
 
