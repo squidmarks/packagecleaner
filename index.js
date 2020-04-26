@@ -170,7 +170,7 @@ function startCleaningCycle(minutes) {
 }
 
 function abortCleaningCycle() {
-  if ((cleaningState != cleaningStates.ozoneTreatment) || (cleaningState != cleaningStates.humidityPulse)) {
+  if ((cleaningState != cleaningStates.ozoneTreatment) && (cleaningState != cleaningStates.humidityPulse)) {
     console.log('Abort cleaning request received with no cycle running')
     telegram.broadcastMessage(`A cleaning cycle has not started`)
     return
