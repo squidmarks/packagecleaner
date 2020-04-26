@@ -77,6 +77,7 @@ function appCleanup() {
 };
 
 function setState(device, state) {
+  console.log(device.read())
   if (state == 'flash') {
     device.write(device.read() ? OFF:ON)
   } else device.write(state === 'on' ? ON:OFF)
