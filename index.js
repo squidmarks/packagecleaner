@@ -78,9 +78,8 @@ function appCleanup() {
 
 function initialize() => {
   stateInterval = setInterval( () => {
-    console.log(cleaningState)
-    ozoneGenerator.write(OFF)
-    humidifier.write(OFF)
+    ozoneGenerator.write(cleaningState.ozone === 'on' ? ON:OFF)
+    humidifier.write(cleaningState.humidifier === 'on' ? ON:OFF)
     redLight.write(cleaningState.redLight === 'on' ? ON:OFF)
     greenLight.write(cleaningState.greenLight === 'on' ? ON:OFF)
   }, stateUpdateInterval)
