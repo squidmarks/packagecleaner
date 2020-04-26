@@ -84,7 +84,11 @@ function setState(device, state) {
 
 function initialize() {
   stateInterval = setInterval( () => {
-    if (!lidSwitch.readSync() && (Date.now() - lidOpenedTime) > 60000) abortCleaningCycle()
+    if (!lidSwitch.readSync()) {
+      if ((Date.now() - lidOpenedTime) > 60000) abortCleaningCycle()
+      setState(ozoneGenerator, OFF)
+      setState(humidifier, OFF)
+    }
     setState(ozoneGenerator, cleaningState.ozone)
     setState(humidifier, cleaningState.humidifier)
     setState(redLight, cleaningState.redLight)
