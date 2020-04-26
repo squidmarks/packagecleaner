@@ -88,11 +88,12 @@ function initialize() {
       if ((Date.now() - lidOpenedTime) > 60000) abortCleaningCycle()
       setState(ozoneGenerator, OFF)
       setState(humidifier, OFF)
+    } else {
+      setState(ozoneGenerator, cleaningState.ozone)
+      setState(humidifier, cleaningState.humidifier)
+      setState(redLight, cleaningState.redLight)
+      setState(greenLight, cleaningState.greenLight)  
     }
-    setState(ozoneGenerator, cleaningState.ozone)
-    setState(humidifier, cleaningState.humidifier)
-    setState(redLight, cleaningState.redLight)
-    setState(greenLight, cleaningState.greenLight)
   }, stateUpdateInterval)
 }
 
