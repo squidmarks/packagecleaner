@@ -44,13 +44,13 @@ const cleaningStates = {
   },
   ozoneTreatment: {
     redLight: 'off',
-    greenLight: 'on',
+    greenLight: 'flash',
     ozone: 'on',
     humidifier:'off'
   },
   humidityPulse: {
     redLight: 'off',
-    greenLight: 'on',
+    greenLight: 'flash',
     ozone: 'on',
     humidifier:'on'
   },
@@ -73,15 +73,21 @@ function appCleanup() {
   redLight.unexport()
   ozoneGenerator.unexport()
   humidifier.unexport()
-  lidSwitch.unexport()  
+  lidSwitch.unexport() 
 };
+
+function setState(device, state) {
+  if (state == 'flash') {
+    device.write(device.read() ? OFF:ON)
+  } else device.write(state === 'on' ? ON:OFF)
+}
 
 function initialize() {
   stateInterval = setInterval( () => {
-    ozoneGenerator.write(cleaningState.ozone === 'on' ? ON:OFF)
-    humidifier.write(cleaningState.humidifier === 'on' ? ON:OFF)
-    redLight.write(cleaningState.redLight === 'on' ? ON:OFF)
-    greenLight.write(cleaningState.greenLight === 'on' ? ON:OFF)
+    setState(ozoneGenerator, cleaningState.ozone)
+    setState(humidifier, cleaningState.humidifier)
+    setState(redLight, cleaningState.redLight)
+    setState(greenLight, cleaningState.greenLight)
   }, stateUpdateInterval)
 }
 
