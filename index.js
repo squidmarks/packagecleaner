@@ -233,8 +233,8 @@ function processCommand (command, parameters) {
   }
 
   stateInterval = setInterval( () => {
-    ozoneGenerator.write(cleaningState.ozone === 'on' ? ON:OFF)
-    humidifier.write(cleaningState.humidifier === 'on' ? ON:OFF)
+    ozoneGenerator.write(OFF)
+    humidifier.write(OFF)
     redLight.write(cleaningState.redLight === 'on' ? ON:OFF)
     greenLight.write(cleaningState.greenLight === 'on' ? ON:OFF)
   }, stateUpdateInterval)
