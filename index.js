@@ -76,7 +76,7 @@ function appCleanup() {
   lidSwitch.unexport()  
 };
 
-function initialize() => {
+function initialize() {
   stateInterval = setInterval( () => {
     ozoneGenerator.write(cleaningState.ozone === 'on' ? ON:OFF)
     humidifier.write(cleaningState.humidifier === 'on' ? ON:OFF)
