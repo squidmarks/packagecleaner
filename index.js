@@ -49,7 +49,7 @@ const cleaningStates = {
     humidifier:'off'
   },
   humidityPulse: {
-    redLight: 'off',
+    redLight: 'flash',
     greenLight: 'flash',
     ozone: 'on',
     humidifier:'on'
