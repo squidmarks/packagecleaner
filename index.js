@@ -86,9 +86,11 @@ function initialize() {
   stateInterval = setInterval( () => {
     if (!lidSwitch.readSync()) {
       if (((Date.now() - lidOpenedTime) > 20000) && 
-        ((cleaningState != cleaningStates.ozoneTreatment) &&  (cleaningState != cleaningStates.humidityPulse))) abortCleaningCycle()
+        ((cleaningState == cleaningStates.ozoneTreatment) || (cleaningState == cleaningStates.humidityPulse))) abortCleaningCycle()
       setState(ozoneGenerator, OFF)
       setState(humidifier, OFF)
+      setState(redLight, OFF)
+      setState(greenLight, OFF)  
     } else {
       setState(ozoneGenerator, cleaningState.ozone)
       setState(humidifier, cleaningState.humidifier)
